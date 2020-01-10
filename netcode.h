@@ -96,6 +96,9 @@ extern "C" {
 #endif
 #endif
 
+#define NETCODE_PING_REQUEST_PACKET           200
+#define NETCODE_PING_RESPONSE_PACKET           201
+
 int netcode_init();
 
 void netcode_term();

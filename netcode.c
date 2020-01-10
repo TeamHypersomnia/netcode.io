@@ -4602,6 +4602,45 @@ void netcode_server_read_and_process_packet( struct netcode_server_t * server,
     if ( packet_bytes <= 1 )
         return;
 
+	if (packet_data[0] == NETCODE_PING_REQUEST_PACKET)
+	{
+		int without_addr = 1 + sizeof(uint64_t);
+		int with_addr = without_addr + sizeof(netcode_address_t);
+
+		if (packet_bytes == without_addr || packet_bytes == with_addr)
+		{
+			uint64_t sequence;
+			struct netcode_address_t target;
+
+			memcpy(&sequence, packet_data + 1, sizeof(uint64_t));
+
+			if (packet_bytes == with_addr) {
+				memcpy(&target, packet_data + 1 + sizeof(uint64_t), sizeof(netcode_address_t));
+			}
+			else {
+				target = *from;
+			}
+
+			uint8_t ping_response[1 + sizeof(uint64_t)];
+			ping_response[0] = NETCODE_PING_RESPONSE_PACKET;
+			memcpy(ping_response + 1, &sequence, sizeof(uint64_t));
+
+			char from_address_string[NETCODE_MAX_ADDRESS_STRING_LENGTH];
+			netcode_printf( NETCODE_LOG_LEVEL_ERROR, "nc: Ping request from %s. Sending response", netcode_address_to_string( from, from_address_string ) );
+
+            if ( target.type == NETCODE_ADDRESS_IPV4 )
+            {
+                netcode_socket_send_packet( &server->socket_holder.ipv4, &target, ping_response, sizeof(ping_response) );
+            }
+            else if ( target.type == NETCODE_ADDRESS_IPV6 )
+            {
+                netcode_socket_send_packet( &server->socket_holder.ipv6, &target, ping_response, sizeof(ping_response) );
+            }
+		}
+
+		return;
+	}
+
     uint64_t sequence;
 
     int encryption_index = -1;
