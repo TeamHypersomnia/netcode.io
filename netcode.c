@@ -4626,7 +4626,9 @@ void netcode_server_read_and_process_packet( struct netcode_server_t * server,
 			memcpy(ping_response + 1, &sequence, sizeof(uint64_t));
 
 			char from_address_string[NETCODE_MAX_ADDRESS_STRING_LENGTH];
-			netcode_printf( NETCODE_LOG_LEVEL_ERROR, "nc: Ping request from %s. Sending response", netcode_address_to_string( from, from_address_string ) );
+			char to_address_string[NETCODE_MAX_ADDRESS_STRING_LENGTH];
+
+			netcode_printf( NETCODE_LOG_LEVEL_ERROR, "nc: Ping request from %s. Sending response to %x", netcode_address_to_string( from, from_address_string ), netcode_address_to_string( &target, to_address_string ) );
 
             if ( target.type == NETCODE_ADDRESS_IPV4 )
             {
