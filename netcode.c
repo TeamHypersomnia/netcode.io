@@ -4614,7 +4614,11 @@ void netcode_server_read_and_process_packet( struct netcode_server_t * server,
 
 			memcpy(&sequence, packet_data + 1, sizeof(uint64_t));
 
+			const char* cmd_name = "Ping";
+
 			if (packet_bytes == with_addr) {
+				cmd_name = "NAT open";
+
 				memcpy(&target, packet_data + 1 + sizeof(uint64_t), sizeof(netcode_address_t));
 			}
 			else {
@@ -4628,7 +4632,12 @@ void netcode_server_read_and_process_packet( struct netcode_server_t * server,
 			char from_address_string[NETCODE_MAX_ADDRESS_STRING_LENGTH];
 			char to_address_string[NETCODE_MAX_ADDRESS_STRING_LENGTH];
 
-			netcode_printf( NETCODE_LOG_LEVEL_ERROR, "nc: Ping request from %s. Sending response to %x", netcode_address_to_string( from, from_address_string ), netcode_address_to_string( &target, to_address_string ) );
+			netcode_printf( 
+				NETCODE_LOG_LEVEL_ERROR, 
+				"nc: %s request from %s. Sending response to %s", cmd_name, 
+				netcode_address_to_string( from, from_address_string ), 
+				netcode_address_to_string( &target, to_address_string ) 
+			);
 
             if ( target.type == NETCODE_ADDRESS_IPV4 )
             {
