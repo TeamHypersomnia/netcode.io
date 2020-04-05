@@ -96,8 +96,7 @@ extern "C" {
 #endif
 #endif
 
-#define NETCODE_PING_REQUEST_PACKET           200
-#define NETCODE_PING_RESPONSE_PACKET           201
+#define NETCODE_AUXILIARY_COMMAND_PACKET 200
 
 int netcode_init();
 
@@ -195,6 +194,9 @@ struct netcode_server_config_t
     int override_send_and_receive;
     void (*send_packet_override)(void*,struct netcode_address_t*,NETCODE_CONST uint8_t*,int);
     int (*receive_packet_override)(void*,struct netcode_address_t*,uint8_t*,int);
+
+	void (*auxiliary_command_function)(void*,struct netcode_address_t*,uint8_t*,int);
+	void * auxiliary_command_context;
 };
 
 void netcode_default_server_config( struct netcode_server_config_t * config );
