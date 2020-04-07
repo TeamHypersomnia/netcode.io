@@ -4602,17 +4602,15 @@ void netcode_server_read_and_process_packet( struct netcode_server_t * server,
     if ( packet_bytes <= 1 )
         return;
 
-	if (packet_data[0] == NETCODE_AUXILIARY_COMMAND_PACKET) {
-		if (server->config.auxiliary_command_function != NULL) {
-			server->config.auxiliary_command_function(
-				server->config.auxiliary_command_context, 
-				from, 
-				packet_data, 
-				packet_bytes
-			);
+	if (server->config.auxiliary_command_function != NULL) {
+		if (server->config.auxiliary_command_function(
+			server->config.auxiliary_command_context, 
+			from, 
+			packet_data, 
+			packet_bytes
+		)) {
+			return;
 		}
-
-		return;
 	}
 
     uint64_t sequence;
