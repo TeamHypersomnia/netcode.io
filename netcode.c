@@ -4240,11 +4240,6 @@ void netcode_server_process_connection_request_packet( struct netcode_server_t *
             found_server_address = 1;
         }
     }
-    if ( !found_server_address )
-    {   
-        netcode_printf( NETCODE_LOG_LEVEL_DEBUG, "server ignored connection request. server address not in connect token whitelist\n" );
-        return;
-    }
 
     if ( netcode_server_find_client_index_by_address( server, from ) != -1 )
     {
