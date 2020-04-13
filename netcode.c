@@ -628,6 +628,22 @@ void netcode_socket_destroy( struct netcode_socket_t * socket )
     }
 }
 
+int netcode_socket_set_ttl( struct netcode_socket_t * s, int ttl )
+{
+	return setsockopt(s->handle, IPPROTO_IP, IP_TTL, &ttl, sizeof(ttl));
+}
+
+int netcode_socket_get_ttl(struct netcode_socket_t * s)
+{
+	int ttl;
+	socklen_t len = sizeof(ttl);
+	int result = getsockopt(s->handle, IPPROTO_IP, IP_TTL, &ttl, &len);
+
+	netcode_assert(0 == result);
+
+	return ttl;
+}
+
 int netcode_socket_create( struct netcode_socket_t * s, struct netcode_address_t * address, int send_buffer_size, int receive_buffer_size )
 {
     netcode_assert( s );
