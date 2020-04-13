@@ -639,6 +639,8 @@ int netcode_socket_get_ttl(struct netcode_socket_t * s)
 	socklen_t len = sizeof(ttl);
 	int result = getsockopt(s->handle, IPPROTO_IP, IP_TTL, (char*)(&ttl), &len);
 
+	(void)result;
+
 	netcode_assert(0 == result);
 
 	return ttl;
