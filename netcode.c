@@ -4615,7 +4615,7 @@ void netcode_server_read_and_process_packet( struct netcode_server_t * server,
     if ( packet_bytes <= 1 )
         return;
 
-	if (server->config.auxiliary_command_function != NULL) {
+    if ( server->config.auxiliary_command_function != NULL ) {
 		if (server->config.auxiliary_command_function(
 			server->config.auxiliary_command_context, 
 			from, 
